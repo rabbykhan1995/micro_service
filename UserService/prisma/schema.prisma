@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  CONSUMER
+  MERCHANT
+  DELIVERY_MAN
+}
+
+// Define the join table model for user type assignments
+model UserTypeAssignment {
+  id       Int      @id @default(autoincrement())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   Int
+  type     UserType  // The user type (one of ADMIN, CONSUMER, etc.)
+  
+  @@unique([userId, type])  // Ensures each user can have only one of each type
+}
+
+
+model User {
+  id          Int                 @id @default(autoincrement()) 
+  username    String              @unique                
+  password    String                                      
+  email       String              @unique                  
+  types       UserTypeAssignment[]                      
+  activeType  UserType?                                     
+ 
+  createdAt   DateTime            @default(now())     
+  updatedAt   DateTime            @updatedAt              
+}

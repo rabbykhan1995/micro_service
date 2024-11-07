@@ -1,0 +1,9 @@
+cd C:\kafka\kafka_2.12-3.8.0
+
+
+##for starting server/ message broker
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+
+## for starting the zookeeper 
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
